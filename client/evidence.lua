@@ -82,7 +82,7 @@ RegisterNetEvent('evidence:client:SetStatus', function(statusId, time)
                 text = StatusList[statusId],
                 time = time
             }
-            QBCore.Functions.Notify(CurrentStatusList[statusId].text, 'error')
+            HksCore.Functions.Notify(CurrentStatusList[statusId].text, 'error')
         end
     elseif StatusList[statusId] then
         CurrentStatusList[statusId] = nil
@@ -126,14 +126,14 @@ end)
 RegisterNetEvent('evidence:client:ClearBlooddropsInArea', function()
     local pos = GetEntityCoords(PlayerPedId())
     local blooddropList = {}
-    QBCore.Functions.Progressbar('clear_blooddrops', Lang:t("progressbar.blood_clear"), 5000, false, true, {
+    HksCore.Functions.Progressbar('clear_blooddrops', Lang:t("progressbar.blood_clear"), 5000, false, true, {
         disableMovement = false,
         disableCarMovement = false,
         disableMouse = false,
         disableCombat = true
     }, {}, {}, {}, function() -- Done
         if Blooddrops and next(Blooddrops) then
-            for bloodId, _ in pairs(Blooddrops) do
+            for bloodId, v in pairs(Blooddrops) do
                 if #(pos -
                     vector3(Blooddrops[bloodId].coords.x, Blooddrops[bloodId].coords.y, Blooddrops[bloodId].coords.z)) <
                     10.0 then
@@ -141,10 +141,10 @@ RegisterNetEvent('evidence:client:ClearBlooddropsInArea', function()
                 end
             end
             TriggerServerEvent('evidence:server:ClearBlooddrops', blooddropList)
-            QBCore.Functions.Notify(Lang:t("success.blood_clear"), "success")
+            HksCore.Functions.Notify(Lang:t("success.blood_clear"), "success")
         end
     end, function() -- Cancel
-        QBCore.Functions.Notify(Lang:t("error.blood_not_cleared"), "error")
+        HksCore.Functions.Notify(Lang:t("error.blood_not_cleared"), "error")
     end)
 end)
 
@@ -168,25 +168,25 @@ end)
 RegisterNetEvent('evidence:client:ClearCasingsInArea', function()
     local pos = GetEntityCoords(PlayerPedId())
     local casingList = {}
-    QBCore.Functions.Progressbar('clear_casings', Lang:t("progressbar.bullet_casing"), 5000, false, true, {
+    HksCore.Functions.Progressbar('clear_casings', Lang:t("progressbar.bullet_casing"), 5000, false, true, {
         disableMovement = false,
         disableCarMovement = false,
         disableMouse = false,
         disableCombat = true
     }, {}, {}, {}, function() -- Done
         if Casings and next(Casings) then
-            for casingId, _ in pairs(Casings) do
+            for casingId, v in pairs(Casings) do
                 if #(pos - vector3(Casings[casingId].coords.x, Casings[casingId].coords.y, Casings[casingId].coords.z)) <
                     10.0 then
                     casingList[#casingList+1] = casingId
                 end
             end
             TriggerServerEvent('evidence:server:ClearCasings', casingList)
-            QBCore.Functions.Notify(Lang:t("success.bullet_casing_removed"), "success")
+            HksCore.Functions.Notify(Lang:t("success.bullet_casing_removed"), "success")
             
         end
     end, function() -- Cancel
-        QBCore.Functions.Notify(Lang:t("error.bullet_casing_not_removed"), "error")
+        HksCore.Functions.Notify(Lang:t("error.bullet_casing_not_removed"), "error")
     end)
 end)
 
@@ -197,7 +197,7 @@ CreateThread(function()
         Wait(10000)
         if LocalPlayer.state.isLoggedIn then
             if CurrentStatusList and next(CurrentStatusList) then
-                for k, _ in pairs(CurrentStatusList) do
+                for k, v in pairs(CurrentStatusList) do
                     if CurrentStatusList[k].time > 0 then
                         CurrentStatusList[k].time = CurrentStatusList[k].time - 10
                     else
@@ -251,7 +251,7 @@ CreateThread(function()
                         label = Lang:t('info.casing'),
                         type = 'casing',
                         street = streetLabel:gsub("%'", ""),
-                        ammolabel = Config.AmmoLabels[QBCore.Shared.Weapons[Casings[CurrentCasing].type]['ammotype']],
+                        ammolabel = Config.AmmoLabels[HksCore.Shared.Weapons[Casings[CurrentCasing].type]['ammotype']],
                         ammotype = Casings[CurrentCasing].type,
                         serie = Casings[CurrentCasing].serie
                     }

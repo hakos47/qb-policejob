@@ -17,41 +17,40 @@ Config.LicenseRank = 2
 Config.UseTarget = GetConvar('UseTarget', 'false') == 'true'
 Config.Locations = {
     ["duty"] = {
-        [1] = vector3(440.085, -974.924, 30.689),
-        [2] = vector3(-449.811, 6012.909, 31.815),
+        [1] = vector3(-1097.3, -818.81, 19.04),
+        --[2] = vector3(-449.811, 6012.909, 31.815),
     },
     ["vehicle"] = {
-        [1] = vector4(448.159, -1017.41, 28.562, 90.654),
-        [2] = vector4(471.13, -1024.05, 28.17, 274.5),
-        [3] = vector4(-455.39, 6002.02, 31.34, 87.93),
+        [1] = vector4(-1078.28, -846.16, 4.88, 213.59),
+        [2] = vector4(-1114.4, -834.61, 13.34, 124.66)
     },
     ["stash"] = {
-        [1] = vector3(453.075, -980.124, 30.889),
+        [1] = vector3(625.93, -8.1, 76.63),
     },
     ["impound"] = {
         [1] = vector4(436.68, -1007.42, 27.32, 180.0),
         [2] = vector4(-436.14, 5982.63, 31.34, 136.0),
     },
     ["helicopter"] = {
-        [1] = vector4(449.168, -981.325, 43.691, 87.234),
-        [2] = vector4(-475.43, 5988.353, 31.716, 31.34),
+        [1] = vector4(-1095.89, -832.1, 37.7, 143.64),
+      --  [2] = vector4(-475.43, 5988.353, 31.716, 31.34),
     },
     ["armory"] = {
-        [1] = vector3(462.23, -981.12, 30.68),
+        [1] = vector3(-1105.23, -822.73, 14.28),
     },
     ["trash"] = {
-        [1] = vector3(439.0907, -976.746, 30.776),
+        [1] = vector3(-1103.82, -843.49, 13.69),
     },
     ["fingerprint"] = {
-        [1] = vector3(460.9667, -989.180, 24.92),
+        [1] = vector3(-1096.22, -813.05, 5.48),
     },
     ["evidence"] = {
-        [1] = vector3(442.1722, -996.067, 30.689),
-        [2] = vector3(451.7031, -973.232, 30.689),
-        [3] = vector3(455.1456, -985.462, 30.689),
+        [1] = vector3(-1088.06, -819.07, 11.04),
+        [2] = vector3(-1078.23, -815.83, 11.04),
+        [3] = vector3(-1092.42, -830.11, 23.04),
     },
     ["stations"] = {
-        [1] = {label = "Police Station", coords = vector4(428.23, -984.28, 29.76, 3.5)},
+        [1] = {label = "Police Station", coords = vector4(-1094.53, -842.24, 37.67, 11.17)},
         [2] = {label = "Prison", coords = vector4(1845.903, 2585.873, 45.672, 272.249)},
         [3] = {label = "Police Station Paleto", coords = vector4(-451.55, 6014.25, 31.716, 223.81)},
     },
@@ -104,59 +103,109 @@ Config.SecurityCameras = {
 Config.AuthorizedVehicles = {
 	-- Grade 0
 	[0] = {
-		["police"] = "Police Car 1",
-		["police2"] = "Police Car 2",
-		["police3"] = "Police Car 3",
-		["police4"] = "Police Car 4",
-		["policeb"] = "Police Car 5",
-		["policet"] = "Police Car 6",
-		["sheriff"] = "Sheriff Car 1",
-		["sheriff2"] = "Sheriff Car 2",
+        ["code3bmw"] = "Moto Carretera",
+		["code398cvpi"] = "Ford patrulla",
+		["code320exp"] = "Camioneta Ford",
+		["CODE318TAHOE"] = "Camioneta Chevrolet",
+        ["code3fpis"] = "Ford patrulla2",
+        ["code3ram"]  = " Todoterreno montaña",
+        ["pd_dirtbike"] = "Moto de montaña",
+		["code318charg"] = "intercertor",
+        ["riot"] = "blindado",  
 	},
 	-- Grade 1
 	[1] = {
-		["police"] = "Police Car 1",
-		["police2"] = "Police Car 2",
-		["police3"] = "Police Car 3",
-		["police4"] = "Police Car 4",
-		["policeb"] = "Police Car 5",
-		["policet"] = "Police Car 6",
-		["sheriff"] = "Sheriff Car 1",
-		["sheriff2"] = "Sheriff Car 2",
-
+        ["code3bmw"] = "Moto Carretera",
+		["code398cvpi"] = "Ford patrulla",
+		["code320exp"] = "Camioneta Ford",
+		["CODE318TAHOE"] = "Camioneta Chevrolet",
+        ["code3fpis"] = "Ford patrulla2",
+        ["code3ram"]  = " Todoterreno montaña",
+        ["pd_dirtbike"] = "Moto de montaña",
+		["code318charg"] = "intercertor",
+        ["riot"] = "blindado",   
 	},
 	-- Grade 2
 	[2] = {
-		["police"] = "Police Car 1",
-		["police2"] = "Police Car 2",
-		["police3"] = "Police Car 3",
-		["police4"] = "Police Car 4",
-		["policeb"] = "Police Car 5",
-		["policet"] = "Police Car 6",
-		["sheriff"] = "Sheriff Car 1",
-		["sheriff2"] = "Sheriff Car 2",
+        ["code3bmw"] = "Moto Carretera",
+		["code398cvpi"] = "Ford patrulla",
+		["code320exp"] = "Camioneta Ford",
+		["CODE318TAHOE"] = "Camioneta Chevrolet",
+        ["code3fpis"] = "Ford patrulla2",
+        ["code3ram"]  = " Todoterreno montaña",
+        ["pd_dirtbike"] = "Moto de montaña",
+		["code318charg"] = "intercertor",
+        ["riot"] = "blindado",  
 	},
 	-- Grade 3
 	[3] = {
-		["police"] = "Police Car 1",
-		["police2"] = "Police Car 2",
-		["police3"] = "Police Car 3",
-		["police4"] = "Police Car 4",
-		["policeb"] = "Police Car 5",
-		["policet"] = "Police Car 6",
-		["sheriff"] = "Sheriff Car 1",
-		["sheriff2"] = "Sheriff Car 2",
+        ["code3bmw"] = "Moto Carretera",
+		["code398cvpi"] = "Ford patrulla",
+		["code320exp"] = "Camioneta Ford",
+		["CODE318TAHOE"] = "Camioneta Chevrolet",
+        ["code3fpis"] = "Ford patrulla2",
+        ["code3ram"]  = " Todoterreno montaña",
+        ["pd_dirtbike"] = "Moto de montaña",
+		["code318charg"] = "intercertor",
+        ["riot"] = "blindado",  
 	},
 	-- Grade 4
 	[4] = {
-		["police"] = "Police Car 1",
-		["police2"] = "Police Car 2",
-		["police3"] = "Police Car 3",
-		["police4"] = "Police Car 4",
-		["policeb"] = "Police Car 5",
-		["policet"] = "Police Car 6",
-		["sheriff"] = "Sheriff Car 1",
-		["sheriff2"] = "Sheriff Car 2",
+
+        ["code3bmw"] = "Moto Carretera",
+		["code398cvpi"] = "Ford patrulla",
+		["code320exp"] = "Camioneta Ford",
+		["CODE318TAHOE"] = "Camioneta Chevrolet",
+        ["code3fpis"] = "Ford patrulla2",
+        ["code3ram"]  = " Todoterreno montaña",
+        ["pd_dirtbike"] = "Moto de montaña",
+		["code318charg"] = "intercertor",
+        ["riot"] = "blindado",    
+	},
+
+    [5] = {
+        ["code3bmw"] = "Moto Carretera",
+		["code398cvpi"] = "Ford patrulla",
+		["code320exp"] = "Camioneta Ford",
+		["CODE318TAHOE"] = "Camioneta Chevrolet",
+        ["code3fpis"] = "Ford patrulla2",
+        ["code3ram"]  = " Todoterreno montaña",
+        ["pd_dirtbike"] = "Moto de montaña",
+		["code318charg"] = "intercertor",
+        ["riot"] = "blindado",  
+	},
+    [6] = {
+		["code3bmw"] = "Moto Carretera",
+		["code398cvpi"] = "Ford patrulla",
+		["code320exp"] = "Camioneta Ford",
+		["CODE318TAHOE"] = "Camioneta Chevrolet",
+        ["code3fpis"] = "Ford patrulla2",
+        ["code3ram"]  = " Todoterreno montaña",
+        ["pd_dirtbike"] = "Moto de montaña",
+		["code318charg"] = "intercertor",
+        ["riot"] = "blindado",  
+	},
+    [7] = {
+        ["code3bmw"] = "Moto Carretera",
+		["code398cvpi"] = "Ford patrulla",
+		["code320exp"] = "Camioneta Ford",
+		["CODE318TAHOE"] = "Camioneta Chevrolet",
+        ["code3fpis"] = "Ford patrulla2",
+        ["code3ram"]  = " Todoterreno montaña",
+        ["pd_dirtbike"] = "Moto de montaña",
+		["code318charg"] = "intercertor",
+        ["riot"] = "blindado",  
+	},
+    [8] = {
+        ["code3bmw"] = "Moto Carretera",
+		["code398cvpi"] = "Ford patrulla",
+		["code320exp"] = "Camioneta Ford",
+		["CODE318TAHOE"] = "Camioneta Chevrolet",
+        ["code3fpis"] = "Ford patrulla2",
+        ["code3ram"]  = " Todoterreno montaña",
+        ["pd_dirtbike"] = "Moto de montaña",
+		["code318charg"] = "intercertor",
+        ["riot"] = "blindado",  
 	}
 }
 
@@ -172,18 +221,19 @@ Config.AmmoLabels = {
 }
 
 Config.Radars = {
-	vector4(-623.44421386719, -823.08361816406, 25.25704574585, 145.0),
-	vector4(-652.44421386719, -854.08361816406, 24.55704574585, 325.0),
-	vector4(1623.0114746094, 1068.9924316406, 80.903594970703, 84.0),
-	vector4(-2604.8994140625, 2996.3391113281, 27.528566360474, 175.0),
-	vector4(2136.65234375, -591.81469726563, 94.272926330566, 318.0),
-	vector4(2117.5764160156, -558.51013183594, 95.683128356934, 158.0),
-	vector4(406.89505004883, -969.06286621094, 29.436267852783, 33.0),
-	vector4(657.315, -218.819, 44.06, 320.0),
-	vector4(2118.287, 6040.027, 50.928, 172.0),
-	vector4(-106.304, -1127.5530, 30.778, 230.0),
-	vector4(-823.3688, -1146.980, 8.0, 300.0),
+	{ coords = vector4(-623.44421386719, -823.08361816406, 25.25704574585, 145.0), bill = 500, bill2 = 1200,limitspeed = 80  }, -- badu ce
+	{ coords = vector4(-652.44421386719, -854.08361816406, 24.55704574585, 325.0), bill = 500, bill2 = 1200,limitspeed = 80  }, -- badu ce
+	{ coords = vector4(1623.0114746094, 1068.9924316406, 80.903594970703, 84.0),   bill = 500, bill2 = 1400, limitspeed = 140 }, -- autpista direccion sandy
+	{ coords = vector4(-2604.8994140625, 2996.3391113281, 27.528566360474, 175.0), bill = 500, bill2 = 1400, limitspeed = 140 }, -- entrada del tunel base
+	{ coords = vector4(2136.65234375, -591.81469726563, 94.272926330566, 318.0),   bill = 500, bill2 = 1400, limitspeed = 140 }, -- auto pista
+	{ coords = vector4(406.89505004883, -969.06286621094, 29.436267852783, 33.0),  bill = 500, bill2 =  700, limitspeed = 50  }, -- comisario pilbox
+	{ coords = vector4(657.315, -218.819, 44.06, 320.0),                           bill = 500, bill2 = 1400, limitspeed = 140 }, -- entrada ciudad autopista
+	{ coords = vector4(2118.287, 6040.027, 50.928, 172.0),                         bill = 500, bill2 = 1400, limitspeed = 140  }, -- entrada tunel paleto 
+	{ coords = vector4(-106.304, -1127.5530, 30.778, 230.0),                       bill = 500, bill2 = 1200, limitspeed = 80  },  -- cruce del conce
+	{ coords = vector4(-823.3688, -1146.980, 8.0, 300.0),                          bill = 500, bill2 = 1200, limitspeed = 80 }, -- canales de vespucci con palomino
 }
+
+Config.speedlimit = 80
 
 Config.CarItems = {
     [1] = {
@@ -214,7 +264,7 @@ Config.Items = {
     slots = 30,
     items = {
         [1] = {
-            name = "weapon_pistol",
+            name = "weapon_combatpistol",
             price = 0,
             amount = 1,
             info = {
@@ -409,8 +459,7 @@ Config.VehicleSettings = {
             ["11"] = true,
             ["12"] = true,
             ["13"] = true,
-        },
-		["livery"] = 1,
+        }
     },
     ["car2"] = {
         ["extras"] = {
@@ -427,7 +476,6 @@ Config.VehicleSettings = {
             ["11"] = true,
             ["12"] = true,
             ["13"] = true,
-        },
-		["livery"] = 1,
+        }
     }
 }

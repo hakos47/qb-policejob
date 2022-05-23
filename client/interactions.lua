@@ -15,7 +15,7 @@ end
 
 local function IsTargetDead(playerId)
     local retval = false
-    QBCore.Functions.TriggerCallback('police:server:isPlayerDead', function(result)
+    HksCore.Functions.TriggerCallback('police:server:isPlayerDead', function(result)
         retval = result
     end, playerId)
     Wait(100)
@@ -64,7 +64,7 @@ end)
 RegisterNetEvent('police:client:PutInVehicle', function()
     local ped = PlayerPedId()
     if isHandcuffed or isEscorted then
-        local vehicle = QBCore.Functions.GetClosestVehicle()
+        local vehicle = HksCore.Functions.GetClosestVehicle()
         if DoesEntityExist(vehicle) then
 			for i = GetVehicleMaxNumberOfPassengers(vehicle), 1, -1 do
                 if IsVehicleSeatFree(vehicle, i) then
@@ -83,45 +83,45 @@ RegisterNetEvent('police:client:PutInVehicle', function()
 end)
 
 RegisterNetEvent('police:client:SearchPlayer', function()
-    local player, distance = QBCore.Functions.GetClosestPlayer()
+    local player, distance = HksCore.Functions.GetClosestPlayer()
     if player ~= -1 and distance < 2.5 then
         local playerId = GetPlayerServerId(player)
         TriggerServerEvent("inventory:server:OpenInventory", "otherplayer", playerId)
         TriggerServerEvent("police:server:SearchPlayer", playerId)
     else
-        QBCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
+        HksCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
     end
 end)
 
 RegisterNetEvent('police:client:SeizeCash', function()
-    local player, distance = QBCore.Functions.GetClosestPlayer()
+    local player, distance = HksCore.Functions.GetClosestPlayer()
     if player ~= -1 and distance < 2.5 then
         local playerId = GetPlayerServerId(player)
         TriggerServerEvent("police:server:SeizeCash", playerId)
     else
-        QBCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
+        HksCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
     end
 end)
 
 RegisterNetEvent('police:client:SeizeDriverLicense', function()
-    local player, distance = QBCore.Functions.GetClosestPlayer()
+    local player, distance = HksCore.Functions.GetClosestPlayer()
     if player ~= -1 and distance < 2.5 then
         local playerId = GetPlayerServerId(player)
         TriggerServerEvent("police:server:SeizeDriverLicense", playerId)
     else
-        QBCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
+        HksCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
     end
 end)
 
 
 RegisterNetEvent('police:client:RobPlayer', function()
-    local player, distance = QBCore.Functions.GetClosestPlayer()
+    local player, distance = HksCore.Functions.GetClosestPlayer()
     local ped = PlayerPedId()
     if player ~= -1 and distance < 2.5 then
         local playerPed = GetPlayerPed(player)
         local playerId = GetPlayerServerId(player)
         if IsEntityPlayingAnim(playerPed, "missminuteman_1ig_2", "handsup_base", 3) or IsEntityPlayingAnim(playerPed, "mp_arresting", "idle", 3) or IsTargetDead(playerId) then
-            QBCore.Functions.Progressbar("robbing_player", Lang:t("progressbar.robbing"), math.random(5000, 7000), false, true, {
+            HksCore.Functions.Progressbar("robbing_player", Lang:t("progressbar.robbing"), math.random(5000, 7000), false, true, {
                 disableMovement = true,
                 disableCarMovement = true,
                 disableMouse = false,
@@ -138,15 +138,15 @@ RegisterNetEvent('police:client:RobPlayer', function()
                     TriggerServerEvent("inventory:server:OpenInventory", "otherplayer", playerId)
                     TriggerEvent("inventory:server:RobPlayer", playerId)
                 else
-                    QBCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
+                    HksCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
                 end
             end, function() -- Cancel
                 StopAnimTask(ped, "random@shop_robbery", "robbery_action_b", 1.0)
-                QBCore.Functions.Notify(Lang:t("error.canceled"), "error")
+                HksCore.Functions.Notify(Lang:t("error.canceled"), "error")
             end)
         end
     else
-        QBCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
+        HksCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
     end
 end)
 
@@ -159,7 +159,7 @@ RegisterNetEvent('police:client:BillCommand', function(playerId, price)
 end)
 
 RegisterNetEvent('police:client:JailPlayer', function()
-    local player, distance = QBCore.Functions.GetClosestPlayer()
+    local player, distance = HksCore.Functions.GetClosestPlayer()
     if player ~= -1 and distance < 2.5 then
         local playerId = GetPlayerServerId(player)
         local dialog = exports['qb-input']:ShowInput({
@@ -177,15 +177,15 @@ RegisterNetEvent('police:client:JailPlayer', function()
         if tonumber(dialog['jailtime']) > 0 then
             TriggerServerEvent("police:server:JailPlayer", playerId, tonumber(dialog['jailtime']))
         else
-            QBCore.Functions.Notify(Lang:t("error.time_higher"), "error")
+            HksCore.Functions.Notify(Lang:t("error.time_higher"), "error")
         end
     else
-        QBCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
+        HksCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
     end
 end)
 
 RegisterNetEvent('police:client:BillPlayer', function()
-    local player, distance = QBCore.Functions.GetClosestPlayer()
+    local player, distance = HksCore.Functions.GetClosestPlayer()
     if player ~= -1 and distance < 2.5 then
         local playerId = GetPlayerServerId(player)
         local dialog = exports['qb-input']:ShowInput({
@@ -203,51 +203,51 @@ RegisterNetEvent('police:client:BillPlayer', function()
         if tonumber(dialog['bill']) > 0 then
             TriggerServerEvent("police:server:BillPlayer", playerId, tonumber(dialog['bill']))
         else
-            QBCore.Functions.Notify(Lang:t("error.amount_higher"), "error")
+            HksCore.Functions.Notify(Lang:t("error.amount_higher"), "error")
         end
     else
-        QBCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
+        HksCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
     end
 end)
 
 RegisterNetEvent('police:client:PutPlayerInVehicle', function()
-    local player, distance = QBCore.Functions.GetClosestPlayer()
+    local player, distance = HksCore.Functions.GetClosestPlayer()
     if player ~= -1 and distance < 2.5 then
         local playerId = GetPlayerServerId(player)
         if not isHandcuffed and not isEscorted then
             TriggerServerEvent("police:server:PutPlayerInVehicle", playerId)
         end
     else
-        QBCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
+        HksCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
     end
 end)
 
 RegisterNetEvent('police:client:SetPlayerOutVehicle', function()
-    local player, distance = QBCore.Functions.GetClosestPlayer()
+    local player, distance = HksCore.Functions.GetClosestPlayer()
     if player ~= -1 and distance < 2.5 then
         local playerId = GetPlayerServerId(player)
         if not isHandcuffed and not isEscorted then
             TriggerServerEvent("police:server:SetPlayerOutVehicle", playerId)
         end
     else
-        QBCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
+        HksCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
     end
 end)
 
 RegisterNetEvent('police:client:EscortPlayer', function()
-    local player, distance = QBCore.Functions.GetClosestPlayer()
+    local player, distance = HksCore.Functions.GetClosestPlayer()
     if player ~= -1 and distance < 2.5 then
         local playerId = GetPlayerServerId(player)
         if not isHandcuffed and not isEscorted then
             TriggerServerEvent("police:server:EscortPlayer", playerId)
         end
     else
-        QBCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
+        HksCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
     end
 end)
 
 RegisterNetEvent('police:client:KidnapPlayer', function()
-    local player, distance = QBCore.Functions.GetClosestPlayer()
+    local player, distance = HksCore.Functions.GetClosestPlayer()
     if player ~= -1 and distance < 2.5 then
         local playerId = GetPlayerServerId(player)
         if not IsPedInAnyVehicle(GetPlayerPed(player)) then
@@ -256,23 +256,23 @@ RegisterNetEvent('police:client:KidnapPlayer', function()
             end
         end
     else
-        QBCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
+        HksCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
     end
 end)
 
 RegisterNetEvent('police:client:CuffPlayerSoft', function()
     if not IsPedRagdoll(PlayerPedId()) then
-        local player, distance = QBCore.Functions.GetClosestPlayer()
+        local player, distance = HksCore.Functions.GetClosestPlayer()
         if player ~= -1 and distance < 1.5 then
             local playerId = GetPlayerServerId(player)
             if not IsPedInAnyVehicle(GetPlayerPed(player)) and not IsPedInAnyVehicle(PlayerPedId()) then
                 TriggerServerEvent("police:server:CuffPlayer", playerId, true)
                 HandCuffAnimation()
             else
-                QBCore.Functions.Notify(Lang:t("error.vehicle_cuff"), "error")
+                HksCore.Functions.Notify(Lang:t("error.vehicle_cuff"), "error")
             end
         else
-            QBCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
+            HksCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
         end
     else
         Wait(2000)
@@ -281,23 +281,23 @@ end)
 
 RegisterNetEvent('police:client:CuffPlayer', function()
     if not IsPedRagdoll(PlayerPedId()) then
-        local player, distance = QBCore.Functions.GetClosestPlayer()
+        local player, distance = HksCore.Functions.GetClosestPlayer()
         if player ~= -1 and distance < 1.5 then
-            QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
+            HksCore.Functions.TriggerCallback('HksCore:HasItem', function(result)
                 if result then
                     local playerId = GetPlayerServerId(player)
                     if not IsPedInAnyVehicle(GetPlayerPed(player)) and not IsPedInAnyVehicle(PlayerPedId()) then
                         TriggerServerEvent("police:server:CuffPlayer", playerId, false)
                         HandCuffAnimation()
                     else
-                        QBCore.Functions.Notify(Lang:t("error.vehicle_cuff"), "error")
+                        HksCore.Functions.Notify(Lang:t("error.vehicle_cuff"), "error")
                     end
                 else
-                    QBCore.Functions.Notify(Lang:t("error.no_cuff"), "error")
+                    HksCore.Functions.Notify(Lang:t("error.no_cuff"), "error")
                 end
             end, Config.HandCuffItem)
         else
-            QBCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
+            HksCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
         end
     else
         Wait(2000)
@@ -306,10 +306,11 @@ end)
 
 RegisterNetEvent('police:client:GetEscorted', function(playerId)
     local ped = PlayerPedId()
-    QBCore.Functions.GetPlayerData(function(PlayerData)
+    HksCore.Functions.GetPlayerData(function(PlayerData)
         if PlayerData.metadata["isdead"] or isHandcuffed or PlayerData.metadata["inlaststand"] then
             if not isEscorted then
                 isEscorted = true
+                draggerId = playerId
                 local dragger = GetPlayerPed(GetPlayerFromServerId(playerId))
                 SetEntityCoords(ped, GetOffsetFromEntityInWorldCoords(dragger, 0.0, 0.45, 0.0))
                 AttachEntityToEntity(ped, dragger, 11816, 0.45, 0.45, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, true)
@@ -330,10 +331,11 @@ end)
 
 RegisterNetEvent('police:client:GetKidnappedTarget', function(playerId)
     local ped = PlayerPedId()
-    QBCore.Functions.GetPlayerData(function(PlayerData)
+    HksCore.Functions.GetPlayerData(function(PlayerData)
         if PlayerData.metadata["isdead"] or PlayerData.metadata["inlaststand"] or isHandcuffed then
             if not isEscorted then
                 isEscorted = true
+                draggerId = playerId
                 local dragger = GetPlayerPed(GetPlayerFromServerId(playerId))
                 RequestAnimDict("nm")
 
@@ -352,9 +354,10 @@ RegisterNetEvent('police:client:GetKidnappedTarget', function(playerId)
     end)
 end)
 
-RegisterNetEvent('police:client:GetKidnappedDragger', function()
-    QBCore.Functions.GetPlayerData(function(_)
+RegisterNetEvent('police:client:GetKidnappedDragger', function(playerId)
+    HksCore.Functions.GetPlayerData(function(PlayerData)
         if not isEscorting then
+            draggerId = playerId
             local dragger = PlayerPedId()
             RequestAnimDict("missfinale_c2mcs_1")
 
@@ -386,11 +389,11 @@ RegisterNetEvent('police:client:GetCuffed', function(playerId, isSoftcuff)
         if not isSoftcuff then
             cuffType = 16
             GetCuffedAnimation(playerId)
-            QBCore.Functions.Notify(Lang:t("info.cuff"), 'primary')
+            HksCore.Functions.Notify(Lang:t("info.cuff"), 'primary')
         else
             cuffType = 49
             GetCuffedAnimation(playerId)
-            QBCore.Functions.Notify(Lang:t("info.cuffed_walk"), 'primary')
+            HksCore.Functions.Notify(Lang:t("info.cuffed_walk"), 'primary')
         end
     else
         isHandcuffed = false
@@ -400,7 +403,7 @@ RegisterNetEvent('police:client:GetCuffed', function(playerId, isSoftcuff)
         TriggerServerEvent("police:server:SetHandcuffStatus", false)
         ClearPedTasksImmediately(ped)
         TriggerServerEvent("InteractSound_SV:PlayOnSource", "Uncuff", 0.2)
-        QBCore.Functions.Notify(Lang:t("success.uncuffed"),"success")
+        HksCore.Functions.Notify(Lang:t("success.uncuffed"),"success")
     end
 end)
 
@@ -457,7 +460,7 @@ CreateThread(function()
             EnableControlAction(0, 249, true) -- Added for talking while cuffed
             EnableControlAction(0, 46, true)  -- Added for talking while cuffed
 
-            if (not IsEntityPlayingAnim(PlayerPedId(), "mp_arresting", "idle", 3) and not IsEntityPlayingAnim(PlayerPedId(), "mp_arrest_paired", "crook_p2_back_right", 3)) and not QBCore.Functions.GetPlayerData().metadata["isdead"] then
+            if (not IsEntityPlayingAnim(PlayerPedId(), "mp_arresting", "idle", 3) and not IsEntityPlayingAnim(PlayerPedId(), "mp_arrest_paired", "crook_p2_back_right", 3)) and not HksCore.Functions.GetPlayerData().metadata["isdead"] then
                 loadAnimDict("mp_arresting")
                 TaskPlayAnim(PlayerPedId(), "mp_arresting", "idle", 8.0, -8, -1, cuffType, 0, 0, 0, 0)
             end

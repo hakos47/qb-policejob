@@ -10,7 +10,7 @@ local function GetClosestPoliceObject()
     local current = nil
     local dist = nil
 
-    for id, _ in pairs(ObjectList) do
+    for id, data in pairs(ObjectList) do
         local dist2 = #(pos - ObjectList[id].coords)
         if current then
             if dist2 < dist then
@@ -28,9 +28,8 @@ end
 function GetClosestSpike()
     local pos = GetEntityCoords(PlayerPedId(), true)
     local current = nil
-    local dist = nil
 
-    for id, _ in pairs(SpawnedSpikes) do
+    for id, data in pairs(SpawnedSpikes) do
         if current then
             if #(pos - vector3(SpawnedSpikes[id].coords.x, SpawnedSpikes[id].coords.y, SpawnedSpikes[id].coords.z)) < dist then
                 current = id
@@ -60,7 +59,7 @@ end
 
 -- Events
 RegisterNetEvent('police:client:spawnCone', function()
-    QBCore.Functions.Progressbar("spawn_object", Lang:t("progressbar.place_object"), 2500, false, true, {
+    HksCore.Functions.Progressbar("spawn_object", Lang:t("progressbar.place_object"), 2500, false, true, {
         disableMovement = true,
         disableCarMovement = true,
         disableMouse = false,
@@ -74,12 +73,12 @@ RegisterNetEvent('police:client:spawnCone', function()
         TriggerServerEvent("police:server:spawnObject", "cone")
     end, function() -- Cancel
         StopAnimTask(PlayerPedId(), "anim@narcotics@trash", "drop_front", 1.0)
-        QBCore.Functions.Notify(Lang:t("error.canceled"), "error")
+        HksCore.Functions.Notify(Lang:t("error.canceled"), "error")
     end)
 end)
 
 RegisterNetEvent('police:client:spawnBarrier', function()
-    QBCore.Functions.Progressbar("spawn_object", Lang:t("progressbar.place_object"), 2500, false, true, {
+    HksCore.Functions.Progressbar("spawn_object", Lang:t("progressbar.place_object"), 2500, false, true, {
         disableMovement = true,
         disableCarMovement = true,
         disableMouse = false,
@@ -93,12 +92,12 @@ RegisterNetEvent('police:client:spawnBarrier', function()
         TriggerServerEvent("police:server:spawnObject", "barrier")
     end, function() -- Cancel
         StopAnimTask(PlayerPedId(), "anim@narcotics@trash", "drop_front", 1.0)
-        QBCore.Functions.Notify(Lang:t("error.canceled"), "error")
+        HksCore.Functions.Notify(Lang:t("error.canceled"), "error")
     end)
 end)
 
 RegisterNetEvent('police:client:spawnRoadSign', function()
-    QBCore.Functions.Progressbar("spawn_object", Lang:t("progressbar.place_object"), 2500, false, true, {
+    HksCore.Functions.Progressbar("spawn_object", Lang:t("progressbar.place_object"), 2500, false, true, {
         disableMovement = true,
         disableCarMovement = true,
         disableMouse = false,
@@ -112,12 +111,12 @@ RegisterNetEvent('police:client:spawnRoadSign', function()
         TriggerServerEvent("police:server:spawnObject", "roadsign")
     end, function() -- Cancel
         StopAnimTask(PlayerPedId(), "anim@narcotics@trash", "drop_front", 1.0)
-        QBCore.Functions.Notify(Lang:t("error.canceled"), "error")
+        HksCore.Functions.Notify(Lang:t("error.canceled"), "error")
     end)
 end)
 
 RegisterNetEvent('police:client:spawnTent', function()
-    QBCore.Functions.Progressbar("spawn_object", Lang:t("progressbar.place_object"), 2500, false, true, {
+    HksCore.Functions.Progressbar("spawn_object", Lang:t("progressbar.place_object"), 2500, false, true, {
         disableMovement = true,
         disableCarMovement = true,
         disableMouse = false,
@@ -131,12 +130,12 @@ RegisterNetEvent('police:client:spawnTent', function()
         TriggerServerEvent("police:server:spawnObject", "tent")
     end, function() -- Cancel
         StopAnimTask(PlayerPedId(), "anim@narcotics@trash", "drop_front", 1.0)
-        QBCore.Functions.Notify(Lang:t("error.canceled"), "error")
+        HksCore.Functions.Notify(Lang:t("error.canceled"), "error")
     end)
 end)
 
 RegisterNetEvent('police:client:spawnLight', function()
-    QBCore.Functions.Progressbar("spawn_object", Lang:t("progressbar.place_object"), 2500, false, true, {
+    HksCore.Functions.Progressbar("spawn_object", Lang:t("progressbar.place_object"), 2500, false, true, {
         disableMovement = true,
         disableCarMovement = true,
         disableMouse = false,
@@ -150,14 +149,14 @@ RegisterNetEvent('police:client:spawnLight', function()
         TriggerServerEvent("police:server:spawnObject", "light")
     end, function() -- Cancel
         StopAnimTask(PlayerPedId(), "anim@narcotics@trash", "drop_front", 1.0)
-        QBCore.Functions.Notify(Lang:t("error.canceled"), "error")
+        HksCore.Functions.Notify(Lang:t("error.canceled"), "error")
     end)
 end)
 
 RegisterNetEvent('police:client:deleteObject', function()
     local objectId, dist = GetClosestPoliceObject()
     if dist < 5.0 then
-        QBCore.Functions.Progressbar("remove_object", Lang:t('progressbar.remove_object'), 2500, false, true, {
+        HksCore.Functions.Progressbar("remove_object", Lang:t('progressbar.remove_object'), 2500, false, true, {
             disableMovement = true,
             disableCarMovement = true,
             disableMouse = false,
@@ -171,7 +170,7 @@ RegisterNetEvent('police:client:deleteObject', function()
             TriggerServerEvent("police:server:deleteObject", objectId)
         end, function() -- Cancel
             StopAnimTask(PlayerPedId(), "weapons@first_person@aim_rng@generic@projectile@thermal_charge@", "plant_floor", 1.0)
-            QBCore.Functions.Notify(Lang:t("error.canceled"), "error")
+            HksCore.Functions.Notify(Lang:t("error.canceled"), "error")
         end)
     end
 end)
@@ -216,7 +215,7 @@ RegisterNetEvent('police:client:SpawnSpikeStrip', function()
             TriggerServerEvent('police:server:SyncSpikes', SpawnedSpikes)
         end
     else
-        QBCore.Functions.Notify(Lang:t("error.no_spikestripe"), 'error')
+        HksCore.Functions.Notify(Lang:t("error.no_spikestripe"), 'error')
     end
 end)
 

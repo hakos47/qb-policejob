@@ -10,6 +10,22 @@ local inHelicopter = false
 local inImpound = false
 local inGarage = false
 
+-- Functions
+local function DrawText3D(x, y, z, text)
+    SetTextScale(0.35, 0.35)
+    SetTextFont(4)
+    SetTextProportional(1)
+    SetTextColour(255, 255, 255, 215)
+    SetTextEntry("STRING")
+    SetTextCentre(true)
+    AddTextComponentString(text)
+    SetDrawOrigin(x,y,z, 0)
+    DrawText(0.0, 0.0)
+    local factor = (string.len(text)) / 370
+    DrawRect(0.0, 0.0+0.0125, 0.017+ factor, 0.03, 0, 0, 0, 75)
+    ClearDrawOrigin()
+end
+
 local function loadAnimDict(dict) -- interactions, job,
     while (not HasAnimDictLoaded(dict)) do
         RequestAnimDict(dict)
@@ -18,7 +34,7 @@ local function loadAnimDict(dict) -- interactions, job,
 end
 
 local function GetClosestPlayer() -- interactions, job, tracker
-    local closestPlayers = QBCore.Functions.GetPlayersFromCoords()
+    local closestPlayers = HksCore.Functions.GetPlayersFromCoords()
     local closestDistance = -1
     local closestPlayer = -1
     local coords = GetEntityCoords(PlayerPedId())
@@ -48,8 +64,8 @@ end
 
 local function SetCarItemsInfo()
 	local items = {}
-	for _, item in pairs(Config.CarItems) do
-		local itemInfo = QBCore.Shared.Items[item.name:lower()]
+	for k, item in pairs(Config.CarItems) do
+		local itemInfo = HksCore.Shared.Items[item.name:lower()]
 		items[item.slot] = {
 			name = itemInfo["name"],
 			amount = tonumber(item.amount),
@@ -113,9 +129,9 @@ end
 function TakeOutImpound(vehicle)
     local coords = Config.Locations["impound"][currentGarage]
     if coords then
-        QBCore.Functions.SpawnVehicle(vehicle.vehicle, function(veh)
-            QBCore.Functions.TriggerCallback('qb-garage:server:GetVehicleProperties', function(properties)
-                QBCore.Functions.SetVehicleProperties(veh, properties)
+        HksCore.Functions.SpawnVehicle(vehicle.vehicle, function(veh)
+            HksCore.Functions.TriggerCallback('qb-garage:server:GetVehicleProperties', function(properties)
+                HksCore.Functions.SetVehicleProperties(veh, properties)
                 SetVehicleNumberPlateText(veh, vehicle.plate)
                 SetEntityHeading(veh, coords.w)
                 exports['LegacyFuel']:SetFuel(veh, vehicle.fuel)
@@ -123,7 +139,7 @@ function TakeOutImpound(vehicle)
                 TriggerServerEvent('police:server:TakeOutImpound',vehicle.plate)
                 closeMenuFull()
                 TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
-                TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
+                TriggerEvent("vehiclekeys:client:SetOwner", HksCore.Functions.GetPlate(veh))
                 SetVehicleEngineOn(veh, true, true)
             end, vehicle.plate)
         end, coords, true)
@@ -133,23 +149,18 @@ end
 function TakeOutVehicle(vehicleInfo)
     local coords = Config.Locations["vehicle"][currentGarage]
     if coords then
-        QBCore.Functions.SpawnVehicle(vehicleInfo, function(veh)
+        HksCore.Functions.SpawnVehicle(vehicleInfo, function(veh)
             SetCarItemsInfo()
             SetVehicleNumberPlateText(veh, Lang:t('info.police_plate')..tostring(math.random(1000, 9999)))
             SetEntityHeading(veh, coords.w)
             exports['LegacyFuel']:SetFuel(veh, 100.0)
             closeMenuFull()
             if Config.VehicleSettings[vehicleInfo] ~= nil then
-                if Config.VehicleSettings[vehicleInfo].extras ~= nil then
-			QBCore.Shared.SetDefaultVehicleExtras(veh, Config.VehicleSettings[vehicleInfo].extras)
-		end
-		if Config.VehicleSettings[vehicleInfo].livery ~= nil then
-			SetVehicleLivery(veh, Config.VehicleSettings[vehicleInfo].livery)
-		end
+                HksCore.Shared.SetDefaultVehicleExtras(veh, Config.VehicleSettings[vehicleInfo].extras)
             end
             TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
-            TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
-            TriggerServerEvent("inventory:server:addTrunkItems", QBCore.Functions.GetPlate(veh), Config.CarItems)
+            TriggerEvent("vehiclekeys:client:SetOwner", HksCore.Functions.GetPlate(veh))
+            TriggerServerEvent("inventory:server:addTrunkItems", HksCore.Functions.GetPlate(veh), Config.CarItems)
             SetVehicleEngineOn(veh, true, true)
         end, coords, true)
     end
@@ -158,16 +169,16 @@ end
 local function IsArmoryWhitelist() -- being removed
     local retval = false
 
-    if QBCore.Functions.GetPlayerData().job.name == 'police' then
+    if HksCore.Functions.GetPlayerData().job.name == 'police' then
         retval = true
     end
     return retval
 end
 
 local function SetWeaponSeries()
-    for k, _ in pairs(Config.Items.items) do
+    for k, v in pairs(Config.Items.items) do
         if k < 6 then
-            Config.Items.items[k].info.serie = tostring(QBCore.Shared.RandomInt(2) .. QBCore.Shared.RandomStr(3) .. QBCore.Shared.RandomInt(1) .. QBCore.Shared.RandomStr(2) .. QBCore.Shared.RandomInt(3) .. QBCore.Shared.RandomStr(4))
+            Config.Items.items[k].info.serie = tostring(HksCore.Shared.RandomInt(2) .. HksCore.Shared.RandomStr(3) .. HksCore.Shared.RandomInt(1) .. HksCore.Shared.RandomStr(2) .. HksCore.Shared.RandomInt(3) .. HksCore.Shared.RandomStr(4))
         end
     end
 end
@@ -180,7 +191,7 @@ function MenuGarage(currentSelection)
         }
     }
 
-    local authorizedVehicles = Config.AuthorizedVehicles[QBCore.Functions.GetPlayerData().job.grade.level]
+    local authorizedVehicles = Config.AuthorizedVehicles[HksCore.Functions.GetPlayerData().job.grade.level]
     for veh, label in pairs(authorizedVehicles) do
         vehicleMenu[#vehicleMenu+1] = {
             header = label,
@@ -229,16 +240,17 @@ function MenuImpound(currentSelection)
             isMenuHeader = true
         }
     }
-    QBCore.Functions.TriggerCallback("police:GetImpoundedVehicles", function(result)
+    HksCore.Functions.TriggerCallback("police:GetImpoundedVehicles", function(result)
         local shouldContinue = false
         if result == nil then
-            QBCore.Functions.Notify(Lang:t("error.no_impound"), "error", 5000)
+            HksCore.Functions.Notify(Lang:t("error.no_impound"), "error", 5000)
         else
             shouldContinue = true
             for _ , v in pairs(result) do
-                local enginePercent = QBCore.Shared.Round(v.engine / 10, 0)
+                local enginePercent = HksCore.Shared.Round(v.engine / 10, 0)
+                local bodyPercent = HksCore.Shared.Round(v.body / 10, 0)
                 local currentFuel = v.fuel
-                local vname = QBCore.Shared.Vehicles[v.vehicle].name
+                local vname = HksCore.Shared.Vehicles[v.vehicle].name
 
                 impoundMenu[#impoundMenu+1] = {
                     header = vname.." ["..v.plate.."]",
@@ -274,10 +286,9 @@ function closeMenuFull()
 end
 
 --NUI Callbacks
-RegisterNUICallback('closeFingerprint', function(_, cb)
+RegisterNUICallback('closeFingerprint', function()
     SetNuiFocus(false, false)
     inFingerprint = false
-    cb('ok')
 end)
 
 --Events
@@ -294,9 +305,8 @@ RegisterNetEvent('police:client:showFingerprintId', function(fid)
     PlaySound(-1, "Event_Start_Text", "GTAO_FM_Events_Soundset", 0, 0, 1)
 end)
 
-RegisterNUICallback('doFingerScan', function(_, cb)
+RegisterNUICallback('doFingerScan', function(data)
     TriggerServerEvent('police:server:showFingerprintId', FingerPrintSessionId)
-    cb("ok")
 end)
 
 RegisterNetEvent('police:client:SendEmergencyMessage', function(coords, message)
@@ -327,7 +337,7 @@ RegisterNetEvent('police:client:CallAnim', function()
 end)
 
 RegisterNetEvent('police:client:ImpoundVehicle', function(fullImpound, price)
-    local vehicle = QBCore.Functions.GetClosestVehicle()
+    local vehicle = HksCore.Functions.GetClosestVehicle()
     local bodyDamage = math.ceil(GetVehicleBodyHealth(vehicle))
     local engineDamage = math.ceil(GetVehicleEngineHealth(vehicle))
     local totalFuel = exports['LegacyFuel']:GetFuel(vehicle)
@@ -336,28 +346,28 @@ RegisterNetEvent('police:client:ImpoundVehicle', function(fullImpound, price)
         local pos = GetEntityCoords(ped)
         local vehpos = GetEntityCoords(vehicle)
         if #(pos - vehpos) < 5.0 and not IsPedInAnyVehicle(ped) then
-            local plate = QBCore.Functions.GetPlate(vehicle)
+            local plate = HksCore.Functions.GetPlate(vehicle)
             TriggerServerEvent("police:server:Impound", plate, fullImpound, price, bodyDamage, engineDamage, totalFuel)
-            QBCore.Functions.DeleteVehicle(vehicle)
+            HksCore.Functions.DeleteVehicle(vehicle)
         end
     end
 end)
 
 RegisterNetEvent('police:client:CheckStatus', function()
-    QBCore.Functions.GetPlayerData(function(PlayerData)
+    HksCore.Functions.GetPlayerData(function(PlayerData)
         if PlayerData.job.name == "police" then
             local player, distance = GetClosestPlayer()
             if player ~= -1 and distance < 5.0 then
                 local playerId = GetPlayerServerId(player)
-                QBCore.Functions.TriggerCallback('police:GetPlayerStatus', function(result)
+                HksCore.Functions.TriggerCallback('police:GetPlayerStatus', function(result)
                     if result then
-                        for _, v in pairs(result) do
-                            QBCore.Functions.Notify(''..v..'')
+                        for k, v in pairs(result) do
+                            HksCore.Functions.Notify(''..v..'')
                         end
                     end
                 end, playerId)
             else
-                QBCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
+                HksCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
             end
         end
     end)
@@ -424,7 +434,7 @@ end)
 -- Toggle Duty in an event.
 RegisterNetEvent('qb-policejob:ToggleDuty', function()
     onDuty = not onDuty
-    TriggerServerEvent("QBCore:ToggleDuty")
+    TriggerServerEvent("HksCore:ToggleDuty")
     TriggerServerEvent("police:server:UpdateCurrentCops")
     TriggerServerEvent("police:server:UpdateBlips")
 end)
@@ -435,7 +445,7 @@ RegisterNetEvent('qb-police:client:scanFingerPrint', function()
         local playerId = GetPlayerServerId(player)
         TriggerServerEvent("police:server:showFingerprint", playerId)
     else
-        QBCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
+        HksCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
     end
 end)
 
@@ -461,11 +471,11 @@ end)
 
 RegisterNetEvent('qb-police:client:spawnHelicopter', function(k)
     if IsPedInAnyVehicle(PlayerPedId(), false) then
-        QBCore.Functions.DeleteVehicle(GetVehiclePedIsIn(PlayerPedId()))
+        HksCore.Functions.DeleteVehicle(GetVehiclePedIsIn(PlayerPedId()))
     else
         local coords = Config.Locations["helicopter"][k]
         if not coords then coords = GetEntityCoords(PlayerPedId()) end
-        QBCore.Functions.SpawnVehicle(Config.PoliceHelicopter, function(veh)
+        HksCore.Functions.SpawnVehicle(Config.PoliceHelicopter, function(veh)
             SetVehicleLivery(veh , 0)
             SetVehicleMod(veh, 0, 48)
             SetVehicleNumberPlateText(veh, "ZULU"..tostring(math.random(1000, 9999)))
@@ -473,7 +483,7 @@ RegisterNetEvent('qb-police:client:spawnHelicopter', function(k)
             exports['LegacyFuel']:SetFuel(veh, 100.0)
             closeMenuFull()
             TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
-            TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
+            TriggerEvent("vehiclekeys:client:SetOwner", HksCore.Functions.GetPlate(veh))
             SetVehicleEngineOn(veh, true, true)
         end, coords, true)
     end
@@ -510,7 +520,7 @@ if Config.UseTarget then
 else
     -- Toggle Duty
     local dutyZones = {}
-    for _, v in pairs(Config.Locations["duty"]) do
+    for k, v in pairs(Config.Locations["duty"]) do
         dutyZones[#dutyZones+1] = BoxZone:Create(
             vector3(vector3(v.x, v.y, v.z)), 1.75, 1, {
             name="box_zone",
@@ -525,9 +535,9 @@ else
         if isPointInside then
             inDuty = true
             if not onDuty then
-                exports['qb-core']:DrawText(Lang:t('info.on_duty'),'left')
+                exports['qb-core']:DrawText(Lang:t('info.on_duty'),'right')
             else
-                exports['qb-core']:DrawText(Lang:t('info.off_duty'),'left')
+                exports['qb-core']:DrawText(Lang:t('info.off_duty'),'right')
             end
         else
             inDuty = false
@@ -545,9 +555,11 @@ else
                 if IsControlJustReleased(0, 38) then
                     onDuty = not onDuty
                     TriggerServerEvent("police:server:UpdateCurrentCops")
-                    TriggerServerEvent("QBCore:ToggleDuty")
+                    TriggerServerEvent("HksCore:ToggleDuty")
                     TriggerServerEvent("police:server:UpdateBlips")
                 end
+            else
+                sleep = 1000
             end
             Wait(sleep)
         end
@@ -557,7 +569,7 @@ end
 CreateThread(function()
     -- Evidence Storage
     local evidenceZones = {}
-    for _, v in pairs(Config.Locations["evidence"]) do
+    for k, v in pairs(Config.Locations["evidence"]) do
         evidenceZones[#evidenceZones+1] = BoxZone:Create(
             vector3(vector3(v.x, v.y, v.z)), 2, 1, {
             name="box_zone",
@@ -598,7 +610,7 @@ CreateThread(function()
 
     -- Personal Stash
     local stashZones = {}
-    for _, v in pairs(Config.Locations["stash"]) do
+    for k, v in pairs(Config.Locations["stash"]) do
         stashZones[#stashZones+1] = BoxZone:Create(
             vector3(vector3(v.x, v.y, v.z)), 1.5, 1.5, {
             name="box_zone",
@@ -609,10 +621,10 @@ CreateThread(function()
     end
 
     local stashCombo = ComboZone:Create(stashZones, {name = "stashCombo", debugPoly = false})
-    stashCombo:onPlayerInOut(function(isPointInside, _, _)
+    stashCombo:onPlayerInOut(function(isPointInside, point, zone)
         if isPointInside then
             inStash = true
-            exports['qb-core']:DrawText(Lang:t('info.stash_enter'), 'left')
+            exports['qb-core']:DrawText(Lang:t('info.stash_enter'), 'right')
         else
             exports['qb-core']:HideText()
             inStash = false
@@ -621,7 +633,7 @@ CreateThread(function()
 
     -- Police Trash
     local trashZones = {}
-    for _, v in pairs(Config.Locations["trash"]) do
+    for k, v in pairs(Config.Locations["trash"]) do
         trashZones[#trashZones+1] = BoxZone:Create(
             vector3(vector3(v.x, v.y, v.z)), 1, 1.75, {
             name="box_zone",
@@ -636,7 +648,7 @@ CreateThread(function()
         if isPointInside then
             inTrash = true
             if onDuty then
-                exports['qb-core']:DrawText(Lang:t('info.trash_enter'),'left')
+                exports['qb-core']:DrawText(Lang:t('info.trash_enter'),'right')
             end
         else
             inTrash = false
@@ -646,7 +658,7 @@ CreateThread(function()
 
     -- Fingerprints
     local fingerprintZones = {}
-    for _, v in pairs(Config.Locations["fingerprint"]) do
+    for k, v in pairs(Config.Locations["fingerprint"]) do
         fingerprintZones[#fingerprintZones+1] = BoxZone:Create(
             vector3(vector3(v.x, v.y, v.z)), 2, 1, {
             name="box_zone",
@@ -661,7 +673,7 @@ CreateThread(function()
         if isPointInside then
             inFingerprint = true
             if onDuty then
-                exports['qb-core']:DrawText(Lang:t('info.scan_fingerprint'),'left')
+                exports['qb-core']:DrawText(Lang:t('info.scan_fingerprint'),'right')
             end
         else
             inFingerprint = false
@@ -671,7 +683,7 @@ CreateThread(function()
 
     -- Armoury
     local armouryZones = {}
-    for _, v in pairs(Config.Locations["armory"]) do
+    for k, v in pairs(Config.Locations["armory"]) do
         armouryZones[#armouryZones+1] = BoxZone:Create(
             vector3(vector3(v.x, v.y, v.z)), 5, 1, {
             name="box_zone",
@@ -686,7 +698,7 @@ CreateThread(function()
         if isPointInside then
             inAmoury = true
             if onDuty then
-                exports['qb-core']:DrawText(Lang:t('info.enter_armory'),'left')
+                exports['qb-core']:DrawText(Lang:t('info.enter_armory'),'right')
             end
         else
             inAmoury = false
@@ -696,7 +708,7 @@ CreateThread(function()
 
     -- Helicopter
     local helicopterZones = {}
-    for _, v in pairs(Config.Locations["helicopter"]) do
+    for k, v in pairs(Config.Locations["helicopter"]) do
         helicopterZones[#helicopterZones+1] = BoxZone:Create(
             vector3(vector3(v.x, v.y, v.z)), 10, 10, {
             name="box_zone",
@@ -713,9 +725,9 @@ CreateThread(function()
             if onDuty then
                 if IsPedInAnyVehicle(PlayerPedId(), false) then
                     exports['qb-core']:HideText()
-                    exports['qb-core']:DrawText(Lang:t('info.store_heli'), 'left')
+                    exports['qb-core']:DrawText(Lang:t('info.store_heli'), 'right')
                 else
-                    exports['qb-core']:DrawText(Lang:t('info.take_heli'), 'left')
+                    exports['qb-core']:DrawText(Lang:t('info.take_heli'), 'right')
                 end
             end
         else
@@ -726,7 +738,7 @@ CreateThread(function()
 
     -- Police Impound
     local impoundZones = {}
-    for _, v in pairs(Config.Locations["impound"]) do
+    for k, v in pairs(Config.Locations["impound"]) do
         impoundZones[#impoundZones+1] = BoxZone:Create(
             vector3(v.x, v.y, v.z), 1, 1, {
             name="box_zone",
@@ -742,7 +754,7 @@ CreateThread(function()
             inImpound = true
             if onDuty then
                 if IsPedInAnyVehicle(PlayerPedId(), false) then
-                    exports['qb-core']:DrawText(Lang:t('info.impound_veh'), 'left')
+                    exports['qb-core']:DrawText(Lang:t('info.impound_veh'), 'right')
                 else
                     local currentSelection = 0
 
@@ -773,7 +785,7 @@ CreateThread(function()
 
     -- Police Garage
     local garageZones = {}
-    for _, v in pairs(Config.Locations["vehicle"]) do
+    for k, v in pairs(Config.Locations["vehicle"]) do
         garageZones[#garageZones+1] = BoxZone:Create(
             vector3(v.x, v.y, v.z), 3, 3, {
             name="box_zone",
@@ -789,7 +801,7 @@ CreateThread(function()
             inGarage = true
             if onDuty and PlayerJob.name == 'police' then
                 if IsPedInAnyVehicle(PlayerPedId(), false) then
-                    exports['qb-core']:DrawText(Lang:t('info.store_veh'), 'left')
+                    exports['qb-core']:DrawText(Lang:t('info.store_veh'), 'right')
                 else
                     local currentSelection = 0
 
@@ -827,8 +839,8 @@ CreateThread(function ()
         if inStash and PlayerJob.name == "police" then
             if onDuty then sleep = 5 end
             if IsControlJustReleased(0, 38) then
-                TriggerServerEvent("inventory:server:OpenInventory", "stash", "policestash_"..QBCore.Functions.GetPlayerData().citizenid)
-                TriggerEvent("inventory:client:SetCurrentStash", "policestash_"..QBCore.Functions.GetPlayerData().citizenid)
+                TriggerServerEvent("inventory:server:OpenInventory", "stash", "policestash_"..HksCore.Functions.GetPlayerData().citizenid)
+                TriggerEvent("inventory:client:SetCurrentStash", "policestash_"..HksCore.Functions.GetPlayerData().citizenid)
             end
         else
             sleep = 1000
@@ -918,7 +930,7 @@ CreateThread(function ()
             if onDuty then sleep = 5 end
             if IsPedInAnyVehicle(PlayerPedId(), false) then
                 if IsControlJustReleased(0, 38) then
-                    QBCore.Functions.DeleteVehicle(GetVehiclePedIsIn(PlayerPedId()))
+                    HksCore.Functions.DeleteVehicle(GetVehiclePedIsIn(PlayerPedId()))
                 end
             end
         else
@@ -937,7 +949,7 @@ CreateThread(function ()
             if onDuty then sleep = 5 end
             if IsPedInAnyVehicle(PlayerPedId(), false) then
                 if IsControlJustReleased(0, 38) then
-                    QBCore.Functions.DeleteVehicle(GetVehiclePedIsIn(PlayerPedId()))
+                    HksCore.Functions.DeleteVehicle(GetVehiclePedIsIn(PlayerPedId()))
                 end
             end
         else

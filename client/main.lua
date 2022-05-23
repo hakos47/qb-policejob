@@ -1,8 +1,9 @@
 -- Variables
-QBCore = exports['qb-core']:GetCoreObject()
+HksCore = exports['qb-core']:GetCoreObject()
 isHandcuffed = false
 cuffType = 1
 isEscorted = false
+draggerId = 0
 PlayerJob = {}
 onDuty = false
 local DutyBlips = {}
@@ -40,12 +41,12 @@ local function CreateDutyBlips(playerId, playerLabel, playerJob, playerLocation)
 end
 
 -- Events
-AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
-    local player = QBCore.Functions.GetPlayerData()
+AddEventHandler('HksCore:Client:OnPlayerLoaded', function()
+    local player = HksCore.Functions.GetPlayerData()
     PlayerJob = player.job
     onDuty = player.job.onduty
     isHandcuffed = false
-    TriggerServerEvent("QBCore:Server:SetMetaData", "ishandcuffed", false)
+    TriggerServerEvent("HksCore:Server:SetMetaData", "ishandcuffed", false)
     TriggerServerEvent("police:server:SetHandcuffStatus", false)
     TriggerServerEvent("police:server:UpdateBlips")
     TriggerServerEvent("police:server:UpdateCurrentCops")
@@ -74,7 +75,7 @@ AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
 
     if PlayerJob and PlayerJob.name ~= "police" then
         if DutyBlips then
-            for _, v in pairs(DutyBlips) do
+            for k, v in pairs(DutyBlips) do
                 RemoveBlip(v)
             end
         end
@@ -82,7 +83,7 @@ AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
     end
 end)
 
-RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
+RegisterNetEvent('HksCore:Client:OnPlayerUnload', function()
     TriggerServerEvent('police:server:UpdateBlips')
     TriggerServerEvent("police:server:SetHandcuffStatus", false)
     TriggerServerEvent("police:server:UpdateCurrentCops")
@@ -92,24 +93,24 @@ RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
     ClearPedTasks(PlayerPedId())
     DetachEntity(PlayerPedId(), true, false)
     if DutyBlips then
-        for _, v in pairs(DutyBlips) do
+        for k, v in pairs(DutyBlips) do
             RemoveBlip(v)
         end
         DutyBlips = {}
     end
 end)
 
-RegisterNetEvent('QBCore:Client:OnJobUpdate', function(JobInfo)
+RegisterNetEvent('HksCore:Client:OnJobUpdate', function(JobInfo)
     if JobInfo.name == "police" and PlayerJob.name ~= "police" then
         if JobInfo.onduty then
-            TriggerServerEvent("QBCore:ToggleDuty")
+            TriggerServerEvent("HksCore:ToggleDuty")
             onDuty = false
         end
     end
 
     if JobInfo.name ~= "police" then
         if DutyBlips then
-            for _, v in pairs(DutyBlips) do
+            for k, v in pairs(DutyBlips) do
                 RemoveBlip(v)
             end
         end
@@ -122,10 +123,10 @@ end)
 RegisterNetEvent('police:client:sendBillingMail', function(amount)
     SetTimeout(math.random(2500, 4000), function()
         local gender = Lang:t('info.mr')
-        if QBCore.Functions.GetPlayerData().charinfo.gender == 1 then
+        if HksCore.Functions.GetPlayerData().charinfo.gender == 1 then
             gender = Lang:t('info.mrs')
         end
-        local charinfo = QBCore.Functions.GetPlayerData().charinfo
+        local charinfo = HksCore.Functions.GetPlayerData().charinfo
         TriggerServerEvent('qb-phone:server:sendNewMail', {
             sender = Lang:t('email.sender'),
             subject = Lang:t('email.subject'),
@@ -139,13 +140,13 @@ RegisterNetEvent('police:client:UpdateBlips', function(players)
     if PlayerJob and (PlayerJob.name == 'police' or PlayerJob.name == 'ambulance') and
         onDuty then
         if DutyBlips then
-            for _, v in pairs(DutyBlips) do
+            for k, v in pairs(DutyBlips) do
                 RemoveBlip(v)
             end
         end
         DutyBlips = {}
         if players then
-            for _, data in pairs(players) do
+            for k, data in pairs(players) do
                 local id = GetPlayerFromServerId(data.source)
                 CreateDutyBlips(id, data.label, data.job, data.location)
 
@@ -158,7 +159,7 @@ RegisterNetEvent('police:client:policeAlert', function(coords, text)
     local street1, street2 = GetStreetNameAtCoord(coords.x, coords.y, coords.z)
     local street1name = GetStreetNameFromHashKey(street1)
     local street2name = GetStreetNameFromHashKey(street2)
-    QBCore.Functions.Notify({text = text, caption = street1name.. ' ' ..street2name}, 'police')
+    HksCore.Functions.Notify({text = text, caption = street1name.. ' ' ..street2name}, 'police')
     PlaySound(-1, "Lose_1st", "GTAO_FM_Events_Soundset", 0, 0, 1)
     local transG = 250
     local blip = AddBlipForCoord(coords.x, coords.y, coords.z)
@@ -202,14 +203,14 @@ RegisterNetEvent('police:client:SendToJail', function(time)
 end)
 
 RegisterNetEvent('police:client:SendPoliceEmergencyAlert', function()
-    local Player = QBCore.Functions.GetPlayerData()
+    local Player = HksCore.Functions.GetPlayerData()
     TriggerServerEvent('police:server:policeAlert', Lang:t('info.officer_down', {lastname = Player.charinfo.lastname, callsign = Player.metadata.callsign}))
     TriggerServerEvent('hospital:server:ambulanceAlert', Lang:t('info.officer_down', {lastname = Player.charinfo.lastname, callsign = Player.metadata.callsign}))
 end)
 
 -- Threads
 CreateThread(function()
-    for _, station in pairs(Config.Locations["stations"]) do
+    for k, station in pairs(Config.Locations["stations"]) do
         local blip = AddBlipForCoord(station.coords.x, station.coords.y, station.coords.z)
         SetBlipSprite(blip, 60)
         SetBlipAsShortRange(blip, true)

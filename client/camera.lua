@@ -40,7 +40,7 @@ local function CloseSecurityCamera()
 end
 
 local function InstructionButton(ControlButton)
-    ScaleformMovieMethodAddParamPlayerNameString(ControlButton)
+    N_0xe83a3e3557a56640(ControlButton)
 end
 
 local function InstructionButtonMessage(text)
@@ -50,7 +50,7 @@ local function InstructionButtonMessage(text)
 end
 
 local function CreateInstuctionScaleform(scaleform)
-    scaleform = RequestScaleformMovie(scaleform)
+    local scaleform = RequestScaleformMovie(scaleform)
     while not HasScaleformMovieLoaded(scaleform) do
         Wait(0)
     end
@@ -113,18 +113,18 @@ RegisterNetEvent('police:client:ActiveCamera', function(cameraId)
         })
         DoScreenFadeIn(250)
     else
-        QBCore.Functions.Notify(Lang:t("error.no_camera"), "error")
+        HksCore.Functions.Notify(Lang:t("error.no_camera"), "error")
     end
 end)
 
 RegisterNetEvent('police:client:DisableAllCameras', function()
-    for k, _ in pairs(Config.SecurityCameras.cameras) do
+    for k, v in pairs(Config.SecurityCameras.cameras) do 
         Config.SecurityCameras.cameras[k].isOnline = false
     end
 end)
 
 RegisterNetEvent('police:client:EnableAllCameras', function()
-    for k, _ in pairs(Config.SecurityCameras.cameras) do
+    for k, v in pairs(Config.SecurityCameras.cameras) do 
         Config.SecurityCameras.cameras[k].isOnline = true
     end
 end)
@@ -136,7 +136,7 @@ end)
 -- Threads
 CreateThread(function()
     while true do
-        local sleep = 2000
+        sleep = 2000
         if createdCamera ~= 0 then
             sleep = 5
             local instructions = CreateInstuctionScaleform("instructional_buttons")

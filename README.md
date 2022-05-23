@@ -1,5 +1,14 @@
 # qb-policejob
+
 Police Job for QB-Core Framework :police_officer:
+
+
+# Changes
+
+- implemented automatic radar system.
+
+
+
 
 # License
 

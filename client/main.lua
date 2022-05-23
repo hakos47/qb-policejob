@@ -1,5 +1,5 @@
 -- Variables
-HksCore = exports['qb-core']:GetCoreObject()
+QBCore = exports['qb-core']:GetCoreObject()
 isHandcuffed = false
 cuffType = 1
 isEscorted = false
@@ -41,12 +41,12 @@ local function CreateDutyBlips(playerId, playerLabel, playerJob, playerLocation)
 end
 
 -- Events
-AddEventHandler('HksCore:Client:OnPlayerLoaded', function()
-    local player = HksCore.Functions.GetPlayerData()
+AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+    local player = QBCore.Functions.GetPlayerData()
     PlayerJob = player.job
     onDuty = player.job.onduty
     isHandcuffed = false
-    TriggerServerEvent("HksCore:Server:SetMetaData", "ishandcuffed", false)
+    TriggerServerEvent("QBCore:Server:SetMetaData", "ishandcuffed", false)
     TriggerServerEvent("police:server:SetHandcuffStatus", false)
     TriggerServerEvent("police:server:UpdateBlips")
     TriggerServerEvent("police:server:UpdateCurrentCops")
@@ -83,7 +83,7 @@ AddEventHandler('HksCore:Client:OnPlayerLoaded', function()
     end
 end)
 
-RegisterNetEvent('HksCore:Client:OnPlayerUnload', function()
+RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
     TriggerServerEvent('police:server:UpdateBlips')
     TriggerServerEvent("police:server:SetHandcuffStatus", false)
     TriggerServerEvent("police:server:UpdateCurrentCops")
@@ -100,10 +100,10 @@ RegisterNetEvent('HksCore:Client:OnPlayerUnload', function()
     end
 end)
 
-RegisterNetEvent('HksCore:Client:OnJobUpdate', function(JobInfo)
+RegisterNetEvent('QBCore:Client:OnJobUpdate', function(JobInfo)
     if JobInfo.name == "police" and PlayerJob.name ~= "police" then
         if JobInfo.onduty then
-            TriggerServerEvent("HksCore:ToggleDuty")
+            TriggerServerEvent("QBCore:ToggleDuty")
             onDuty = false
         end
     end
@@ -123,10 +123,10 @@ end)
 RegisterNetEvent('police:client:sendBillingMail', function(amount)
     SetTimeout(math.random(2500, 4000), function()
         local gender = Lang:t('info.mr')
-        if HksCore.Functions.GetPlayerData().charinfo.gender == 1 then
+        if QBCore.Functions.GetPlayerData().charinfo.gender == 1 then
             gender = Lang:t('info.mrs')
         end
-        local charinfo = HksCore.Functions.GetPlayerData().charinfo
+        local charinfo = QBCore.Functions.GetPlayerData().charinfo
         TriggerServerEvent('qb-phone:server:sendNewMail', {
             sender = Lang:t('email.sender'),
             subject = Lang:t('email.subject'),
@@ -159,7 +159,7 @@ RegisterNetEvent('police:client:policeAlert', function(coords, text)
     local street1, street2 = GetStreetNameAtCoord(coords.x, coords.y, coords.z)
     local street1name = GetStreetNameFromHashKey(street1)
     local street2name = GetStreetNameFromHashKey(street2)
-    HksCore.Functions.Notify({text = text, caption = street1name.. ' ' ..street2name}, 'police')
+    QBCore.Functions.Notify({text = text, caption = street1name.. ' ' ..street2name}, 'police')
     PlaySound(-1, "Lose_1st", "GTAO_FM_Events_Soundset", 0, 0, 1)
     local transG = 250
     local blip = AddBlipForCoord(coords.x, coords.y, coords.z)
@@ -203,7 +203,7 @@ RegisterNetEvent('police:client:SendToJail', function(time)
 end)
 
 RegisterNetEvent('police:client:SendPoliceEmergencyAlert', function()
-    local Player = HksCore.Functions.GetPlayerData()
+    local Player = QBCore.Functions.GetPlayerData()
     TriggerServerEvent('police:server:policeAlert', Lang:t('info.officer_down', {lastname = Player.charinfo.lastname, callsign = Player.metadata.callsign}))
     TriggerServerEvent('hospital:server:ambulanceAlert', Lang:t('info.officer_down', {lastname = Player.charinfo.lastname, callsign = Player.metadata.callsign}))
 end)

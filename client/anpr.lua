@@ -21,8 +21,8 @@ function HandlespeedCam(speedCam, hasBeenBusted)
 					local ped = PlayerPedId()
 					local veh = GetVehiclePedIsIn(ped, false)
 					local speed = math.ceil(GetEntitySpeed(veh) * 3.6)
-                    local plate = HksCore.Functions.GetPlate(vehicle)
-					local PlayerData = HksCore.Functions.GetPlayerData()
+                    local plate = QBCore.Functions.GetPlate(vehicle)
+					local PlayerData = QBCore.Functions.GetPlayerData()
 					print (speed)
 					print (speedCam.limitspeed)
 					if speed > speedCam.limitspeed then 
@@ -32,7 +32,7 @@ function HandlespeedCam(speedCam, hasBeenBusted)
 							amount = speedCam.bill
 						end
 						Wait (10)
-						HksCore.Functions.TriggerCallback('police:IsPlateFlagged', function(result)
+						QBCore.Functions.TriggerCallback('police:IsPlateFlagged', function(result)
 							retval = result.retval
 							vehData = result.vehData
 							local coords = GetEntityCoords(PlayerPedId())

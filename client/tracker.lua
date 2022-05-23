@@ -1,10 +1,10 @@
 RegisterNetEvent('police:client:CheckDistance', function()
-    local player, distance = HksCore.Functions.GetClosestPlayer()
+    local player, distance = QBCore.Functions.GetClosestPlayer()
     if player ~= -1 and distance < 2.5 then
         local playerId = GetPlayerServerId(player)
         TriggerServerEvent("police:server:SetTracker", playerId)
     else
-        HksCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
+        QBCore.Functions.Notify(Lang:t("error.none_nearby"), "error")
     end
 end)
 
@@ -35,7 +35,7 @@ end)
 
 RegisterNetEvent('police:client:TrackerMessage', function(msg, coords)
     PlaySound(-1, "Lose_1st", "GTAO_FM_Events_Soundset", 0, 0, 1)
-    HksCore.Functions.Notify(msg, 'police')
+    QBCore.Functions.Notify(msg, 'police')
     local transG = 250
     local blip = AddBlipForCoord(coords.x, coords.y, coords.z)
     SetBlipSprite(blip, 458)
